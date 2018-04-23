@@ -58,13 +58,13 @@ public class OtsuBinarryFilter {
             for(int j = 0; j < width; j++){
                 int gray = src.getPixel(j, i) & 0xff;
                 if(gray < threshold){
-                    gray =255;
+                    gray = 0;
 
                     gray = (0xff << 24)| (gray << 16)| (gray <<8)| gray;
                     dest.setPixel(j,i, gray);
                 }
                 else{
-                    gray = 0;
+                    gray = 255;
                     gray = (0xff << 24)| (gray << 16)| (gray <<8)| gray;
                     dest.setPixel(j,i, gray);
                 }

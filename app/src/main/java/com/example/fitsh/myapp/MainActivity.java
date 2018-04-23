@@ -63,6 +63,7 @@ public class MainActivity extends Activity {
         imageView=findViewById(R.id.pic);
         textView = findViewById(R.id.textView);
         askMultiPermission();
+        LogToFile.init(this);
     }
     public int askMultiPermission(){
         needPermission = new ArrayList<>();
@@ -191,15 +192,17 @@ public class MainActivity extends Activity {
 //            }
             path = Environment.getExternalStorageDirectory()+"/MyApp/Cache/temp.jpg";
             Bitmap bitmap = BitmapFactory.decodeFile(path);
+            Bitmap photo = bitmap;
+            bitmap = RoomImage.bilinear(bitmap, 600, 600);
             Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
             bitmap = Gray_Scale.getGray(bitmap);
             Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
             bitmap = OtsuBinarryFilter.filter(bitmap, null);
             Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
             imageView.setImageBitmap(bitmap);
-            int text = DigitalExtraction.getDigital(bitmap);
-            Log.i("MAIN","bitmap num= "+text +" ++++++++++++++++++++++++++++++++++++++++++++");
-            textView.setText(text+"");
+            List<Long> longList = DigitalExtraction.getDigital(MainActivity.this, bitmap);
+            Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
+            textView.setText(longList.toString() + "");
         }
     }
     public static Uri getUriForFile(Context context, File file){
@@ -234,8 +237,8 @@ public class MainActivity extends Activity {
         intent.putExtra("aspectX", 1);// 裁剪框比例
         intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 500);// 输出图片大小
-        intent.putExtra("outputY", 500);
+        // intent.putExtra("outputX", 60);// 输出图片大小
+        //intent.putExtra("outputY", 60);
         //裁剪时是否保留图片的比例，这里的比例是1:1
         intent.putExtra("scale", true);
         //是否是圆形裁剪区域，设置了也不一定有效
