@@ -64,4 +64,5 @@ public class RecognitionImage {
         System.out.println("fPixels"+fPixels[10]);
         return recognitionSingle(fPixels);
     }
+
 }

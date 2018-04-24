@@ -120,14 +120,14 @@ public class DigitalExtraction {
         int num = 0;
 
         for (int i = 0; i < height; i++) {
-            String s = "";
+            //String s = "";
             for (int j = 0; j < width; j++) {
                 flag[i][j] = -1;
                 int pixel = src.getPixel(j, i);
                 pixel = pixel & 0xFF;
-                s = s + (pixel == BLACK ? 1 : 0) + " ";
+                // s = s + (pixel == BLACK ? 1 : 0) + " ";
             }
-            LogToFile.i("Main" + i, s);
+            // LogToFile.i("Main" + i, s);
         }
         int[] di = {0, -1, -1, -1, 0, 1, 1, 1};
         int[] dj = {-1, -1, 0, 1, 1, -1, 0, 1};
@@ -189,7 +189,7 @@ public class DigitalExtraction {
             maxh = Math.max(maxh, eachHeight[i]);
             maxw = Math.max(maxw, eachWidth[i]);
             // System.out.println("i="+i+" maxWidth="+maxWidth[i] + " minWidth="+minWidth[i]+" eachHeight="+eachHeight[i] + " eachWidth="+eachWidth[i]+"   "+lists.get(i).size());
-            if (eachHeight[i] < 3 || eachWidth[i] < 3) {
+            if (eachHeight[i] < 5 || eachWidth[i] < 5) {
                 tmp--;
                 continue;
             }
@@ -205,7 +205,12 @@ public class DigitalExtraction {
         // System.out.println("tmp="+tmp+" aveHeight="+aveHeight + " aveWidth="+aveWidth);
         List<Long> ansList = new ArrayList<>();
         for (int i = num - 1; i >= 0; i--) {
-            if (eachHeight[i] < 3 || eachWidth[i] < 3) {
+            if (eachHeight[i] < 5 || eachWidth[i] < 5) {
+                num--;
+                continue;
+            }
+            if (eachWidth[i] < 13 && eachHeight[i] < 13) {
+                lists.get(i).clear();
                 num--;
                 continue;
             }
@@ -214,7 +219,7 @@ public class DigitalExtraction {
                 num--;
                 continue;
             }
-            if (eachWidth[i] < Math.max(aveWidth / 20, 3) || eachHeight[i] < Math.max(aveHeight / 20, 3)) {
+            if (eachWidth[i] < Math.max(aveWidth / 12, 3) || eachHeight[i] < Math.max(aveHeight / 12, 3)) {
                 lists.get(i).clear();
                 num--;
                 continue;
@@ -239,8 +244,22 @@ public class DigitalExtraction {
             bitmap = RoomImage.bilinear(bitmap, 28, 28);
             bitmap = Gray_Scale.getGray(bitmap);
             bitmap = OtsuBinarryFilter.filter(bitmap, null);
+            //ExpansionImage expansionImage = new ExpansionImage(bitmap);
+            // bitmap = expansionImage.getExpansion();
+            System.out.println("digital1 +" + i + "  -------------------");
             RecognitionImage recognitionImage = new RecognitionImage(context);
             ansList.add(recognitionImage.recognition(bitmap));
+            System.out.println("digital2 +" + i + "  -------------------");
+            for (int j = 0; j < bitmap.getHeight(); j++) {
+                String s = "";
+                for (int k = 0; k < bitmap.getWidth(); k++) {
+                    int p = bitmap.getPixel(k, j);
+                    p = p & 0xFF;
+                    s = s + (p == 255 ? 1 : 0) + " ";
+                }
+                LogToFile.i("MAIN" + j, s);
+            }
+            System.out.println("digital3 +" + i + "  -------------------");
 
         }
         return ansList;

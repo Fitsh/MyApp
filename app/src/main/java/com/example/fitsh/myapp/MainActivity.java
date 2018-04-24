@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
     private ImageView imageView=null;
     private TextView textView = null;
     private List<String> needPermission;
+    private Bitmap photo = null;
     private String[] permissionArray = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
@@ -127,11 +128,30 @@ public class MainActivity extends Activity {
                     Toast.makeText(MainActivity.this, "请检查SDCard！", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.bt3:
+                textView.setText("");
+                if (photo == null) {
+                    Toast.makeText(MainActivity.this, "没有选择图片", Toast.LENGTH_LONG).show();
+                    textView.setText("没有选择图片。。");
+                    break;
+                }
+                textView.setText("识别中，请稍等。。");
+                Toast.makeText(MainActivity.this, "识别中，请稍等。。", Toast.LENGTH_LONG).show();
+                List<Long> longList = ImageProcess.pre(MainActivity.this, photo);
+                String s = "";
+                for (long l : longList) {
+                    s = s + l;
+                }
+                Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
+                textView.setText(s + "");
+
+                break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        textView.setText("");
         Log.i("Main", "requestCode"+requestCode+"resultCode"+resultCode+" ..............................................................");
         Uri uri = null;
         String path = "";
@@ -192,17 +212,17 @@ public class MainActivity extends Activity {
 //            }
             path = Environment.getExternalStorageDirectory()+"/MyApp/Cache/temp.jpg";
             Bitmap bitmap = BitmapFactory.decodeFile(path);
-            Bitmap photo = bitmap;
-            bitmap = RoomImage.bilinear(bitmap, 600, 600);
-            Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
-            bitmap = Gray_Scale.getGray(bitmap);
-            Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
-            bitmap = OtsuBinarryFilter.filter(bitmap, null);
-            Log.i("MAIN","bitmap width="+bitmap.getWidth() +" height="+bitmap.getHeight());
-            imageView.setImageBitmap(bitmap);
-            List<Long> longList = DigitalExtraction.getDigital(MainActivity.this, bitmap);
-            Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
-            textView.setText(longList.toString() + "");
+            photo = bitmap;
+
+            imageView.setImageBitmap(photo);
+//            List<Long> longList=ImageProcess.pre(MainActivity.this, bitmap);
+//            String s ="";
+//            for(long l:longList){
+//                s=s+l;
+//            }
+//            Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
+//            textView.setText(s + "");
+
         }
     }
     public static Uri getUriForFile(Context context, File file){

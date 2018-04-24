@@ -19,17 +19,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="take photo"/>
+
+        <Button
+            android:id="@+id/bt3"
+            android:onClick="doClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="识别" />
     </android.support.v7.widget.ActionMenuView>
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints="识别图片"
-        android:background="@color/colorAccent" />
+        android:layout_gravity="center" />
 </LinearLayout>
