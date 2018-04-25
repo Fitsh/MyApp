@@ -47,6 +47,9 @@ public class MainActivity extends Activity {
     private static final String IMAGE_UNSPECIFIED = "image/*";
     private static final String change_path = "/MyApp/Image";
     private Uri photoUri;
+    private ImageView imageView1 = null;
+    private ImageView imageView2 = null;
+    private ImageView imageView3 = null;
     private ImageView imageView=null;
     private TextView textView = null;
     private List<String> needPermission;
@@ -62,6 +65,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         imageView=findViewById(R.id.pic);
+        imageView1 = findViewById(R.id.pic1);
+        imageView2 = findViewById(R.id.pic2);
+        imageView3 = findViewById(R.id.pic3);
         textView = findViewById(R.id.textView);
         askMultiPermission();
         LogToFile.init(this);
@@ -135,9 +141,23 @@ public class MainActivity extends Activity {
                     textView.setText("没有选择图片。。");
                     break;
                 }
+                textView.setText("3424");
+                Bitmap bitmap = photo;
+                bitmap = RoomImage.bilinear(bitmap, 500, 500);
+                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
+                bitmap = Gray_Scale.getGray(bitmap);
+                // imageView1.setImageBitmap(bitmap);
+                bitmap = AverageProcess.get(bitmap);
+                //  RetinexImage retinexImage = new RetinexImage();
+                //bitmap = retinexImage.retinex_frankle_mccann(bitmap, 6);
+                imageView2.setImageBitmap(bitmap);
+                bitmap = Gray_Scale.getGray(bitmap);
+                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
+                bitmap = OtsuBinarryFilter.filter(bitmap, null);
+                //imageView3.setImageBitmap(bitmap);
                 textView.setText("识别中，请稍等。。");
                 Toast.makeText(MainActivity.this, "识别中，请稍等。。", Toast.LENGTH_LONG).show();
-                List<Long> longList = ImageProcess.pre(MainActivity.this, photo);
+                List<Long> longList = ImageProcess.pre(MainActivity.this, bitmap);
                 String s = "";
                 for (long l : longList) {
                     s = s + l;
@@ -214,7 +234,7 @@ public class MainActivity extends Activity {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             photo = bitmap;
 
-            imageView.setImageBitmap(photo);
+            // imageView.setImageBitmap(photo);
 //            List<Long> longList=ImageProcess.pre(MainActivity.this, bitmap);
 //            String s ="";
 //            for(long l:longList){
