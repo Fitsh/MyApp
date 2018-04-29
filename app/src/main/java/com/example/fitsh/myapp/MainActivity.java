@@ -143,27 +143,29 @@ public class MainActivity extends Activity {
                 }
                 textView.setText("3424");
                 Bitmap bitmap = photo;
-                bitmap = RoomImage.bilinear(bitmap, 500, 500);
-                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
-                bitmap = Gray_Scale.getGray(bitmap);
-                // imageView1.setImageBitmap(bitmap);
-                bitmap = AverageProcess.get(bitmap);
-                //  RetinexImage retinexImage = new RetinexImage();
-                //bitmap = retinexImage.retinex_frankle_mccann(bitmap, 6);
-                imageView2.setImageBitmap(bitmap);
-                bitmap = Gray_Scale.getGray(bitmap);
-                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
-                bitmap = OtsuBinarryFilter.filter(bitmap, null);
-                //imageView3.setImageBitmap(bitmap);
-                textView.setText("识别中，请稍等。。");
-                Toast.makeText(MainActivity.this, "识别中，请稍等。。", Toast.LENGTH_LONG).show();
-                List<Long> longList = ImageProcess.pre(MainActivity.this, bitmap);
-                String s = "";
-                for (long l : longList) {
-                    s = s + l;
-                }
-                Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
-                textView.setText(s + "");
+                imageView.setImageBitmap(photo);
+                new ImageProcess(MainActivity.this, textView).process(bitmap);
+//                bitmap = RoomImage.bilinear(bitmap, 500, 500);
+//                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
+//                bitmap = Gray_Scale.getGray(bitmap);
+//                // imageView1.setImageBitmap(bitmap);
+//                bitmap = AverageProcess.get(bitmap);
+//                //  RetinexImage retinexImage = new RetinexImage();
+//                //bitmap = retinexImage.retinex_frankle_mccann(bitmap, 6);
+//                imageView2.setImageBitmap(bitmap);
+//                bitmap = Gray_Scale.getGray(bitmap);
+//                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
+//                bitmap = OtsuBinarryFilter.filter(bitmap, null);
+//                //imageView3.setImageBitmap(bitmap);
+//                textView.setText("识别中，请稍等。。");
+//                Toast.makeText(MainActivity.this, "识别中，请稍等。。", Toast.LENGTH_LONG).show();
+//                List<Long> longList = ImageProcess.pre(MainActivity.this, bitmap);
+//                String s = "";
+//                for (long l : longList) {
+//                    s = s + l;
+//                }
+//                Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
+//                textView.setText(s + "");
 
                 break;
         }
