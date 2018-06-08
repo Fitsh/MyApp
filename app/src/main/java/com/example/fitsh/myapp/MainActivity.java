@@ -2,6 +2,7 @@ package com.example.fitsh.myapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final int NONE = 0;
     private static final int FLAG_TAKE_PHOTO = 1; // take picture
@@ -58,6 +59,10 @@ public class MainActivity extends Activity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.SEND_RESPOND_VIA_MESSAGE,
            // Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS
     };
     @Override
@@ -65,9 +70,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         imageView=findViewById(R.id.pic);
-        imageView1 = findViewById(R.id.pic1);
-        imageView2 = findViewById(R.id.pic2);
-        imageView3 = findViewById(R.id.pic3);
         textView = findViewById(R.id.textView);
         askMultiPermission();
         LogToFile.init(this);
@@ -144,7 +146,7 @@ public class MainActivity extends Activity {
                 textView.setText("3424");
                 Bitmap bitmap = photo;
                 imageView.setImageBitmap(photo);
-                new ImageProcess(MainActivity.this, textView).process(bitmap);
+                new ImageProcess(MainActivity.this, textView, getSupportFragmentManager(),imageView).process(bitmap);
 //                bitmap = RoomImage.bilinear(bitmap, 500, 500);
 //                Log.i("MAIN", "bitmap width=" + bitmap.getWidth() + " height=" + bitmap.getHeight());
 //                bitmap = Gray_Scale.getGray(bitmap);
@@ -167,6 +169,27 @@ public class MainActivity extends Activity {
 //                Log.i("MAIN", "bitmap num= " + longList.toString() + " ++++++++++++++++++++++++++++++++++++++++++++");
 //                textView.setText(s + "");
 
+                break;
+            case R.id.bt4:
+                String numPhone = (String) textView.getText();
+                diallphone(numPhone);
+                break;
+            case R.id.bt5:
+                numPhone = (String) textView.getText();
+                Uri smsToUri = Uri.parse("smsto:"+numPhone);
+                intent = new Intent(Intent.ACTION_SENDTO, smsToUri);
+                startActivity(intent);
+                break;
+            case R.id.bt6:
+                numPhone = (String)textView.getText();
+                addPhone(numPhone);
+                break;
+            case R.id.bt7:
+                onClickCopy();
+                break;
+            case R.id.bt8:
+                numPhone = (String)textView.getText();
+                shareText(null,null,numPhone);
                 break;
         }
     }
@@ -324,5 +347,44 @@ public class MainActivity extends Activity {
 //        startActivityForResult(intent, PHOTO_RESOULT);
 //
 //    }
+    public void diallphone(String phoneNum){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
+    }
+    public void addPhone(String number){
+        Intent addIntent = new Intent(Intent.ACTION_INSERT,Uri.withAppendedPath(Uri.parse("content://com.android.contacts"), "contacts"));
+        addIntent.setType("vnd.android.cursor.dir/person");
+        addIntent.setType("vnd.android.cursor.dir/contact");
+        addIntent.setType("vnd.android.cursor.dir/raw_contact");
+        addIntent.putExtra(ContactsContract.Intents.Insert.PHONE,number);
+        //addIntent.putExtra(android.provider.ContactsContract.Intents.Insert.PHONE, numberForNewConstant);
+        startActivity(addIntent);
+    }
+    public void onClickCopy() {
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(textView.getText());
+        Toast.makeText(this, "复制成功，可以发给朋友们了。", Toast.LENGTH_LONG).show();
+    }
+    private void shareText(String dlgTitle, String subject, String content) {
+        if (content == null || "".equals(content)) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        if (subject != null && !"".equals(subject)) {
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        }
 
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+
+        // 设置弹出框标题
+        if (dlgTitle != null && !"".equals(dlgTitle)) { // 自定义标题
+            startActivity(Intent.createChooser(intent, dlgTitle));
+        } else { // 系统默认标题
+            startActivity(intent);
+        }
+    }
 }

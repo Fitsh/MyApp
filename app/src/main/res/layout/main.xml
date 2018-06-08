@@ -1,62 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.v7.widget.ActionMenuView
+    <LinearLayout
+        android:layout_weight="3"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/bt1"
-            android:onClick="doClick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="相册"/>
-        <Button
-            android:id="@+id/bt2"
-            android:onClick="doClick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="take photo"/>
+        android:layout_height="0dp"
+        >
 
-        <Button
-            android:id="@+id/bt3"
-            android:onClick="doClick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="识别" />
-    </android.support.v7.widget.ActionMenuView>
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ImageView
+        android:layout_weight="7"
         android:id="@+id/pic"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:autofillHints="识别图片"
         android:layout_gravity="center" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="24dp"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="未选择用于识别的图片"/>
+    </LinearLayout>
+    <LinearLayout
 
-    <ImageView
-        android:id="@+id/pic1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autofillHints="识别图片"
-        android:layout_gravity="center" />
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <Button
+        android:layout_weight="1"
+        android:id="@+id/bt1"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="相册"/>
+    <Button
+        android:layout_weight="1"
+        android:id="@+id/bt2"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:text="take photo"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+    <Button
+        android:id="@+id/bt3"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="识别" />
+    <Button
+        android:id="@+id/bt4"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="打电话" />
+    <Button
+        android:id="@+id/bt5"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="发短信" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+    <Button
+        android:id="@+id/bt6"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="添加联系人" />
+    <Button
+        android:id="@+id/bt7"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="复制" />
 
-    <ImageView
-        android:id="@+id/pic2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autofillHints="识别图片"
-        android:layout_gravity="center" />
-
-    <ImageView
-        android:id="@+id/pic3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autofillHints="识别图片"
-        android:layout_gravity="center" />
+    <Button
+        android:id="@+id/bt8"
+        android:onClick="doClick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="分享" />
+    </LinearLayout>
 </LinearLayout>

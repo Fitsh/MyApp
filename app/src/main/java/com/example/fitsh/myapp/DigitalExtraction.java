@@ -105,6 +105,9 @@ public class DigitalExtraction {
 //}
 
     public static List<Long> getDigital(Context context, Bitmap src) {
+
+       // RecognitionImage.saveImage(src);
+
         List<List<Pair<Integer, Integer>>> lists = new ArrayList<>();
         int[][] flag = new int[Size][Size];
         int[] maxWidth = new int[Size * Size];
@@ -224,7 +227,17 @@ public class DigitalExtraction {
                 num--;
                 continue;
             }
+            if (eachWidth[i] > eachHeight[i] *2  ) {
+                lists.get(i).clear();
+                num--;
+                continue;
+            }
             int max = Math.max(Math.max(eachHeight[i], eachWidth[i]), 26) + 2;
+            if(lists.get(i).size()> max*max/2){
+                lists.get(i).clear();
+                num--;
+                continue;
+            }
             Bitmap bitmap = Bitmap.createBitmap(max, max, Bitmap.Config.ARGB_8888);
             int gray = BLACK;
             gray = (0xFF << 24) | (gray << 16) | (gray << 8) | gray;
@@ -241,11 +254,15 @@ public class DigitalExtraction {
                 //     System.out.println("pair.getFirst()"+pair.getFirst() + " minHeight"+minHeight[i]+" maxh="+maxh);
                 bitmap.setPixel(maxw + pair.getSecond() - minWidth[i], maxh + pair.getFirst() - minHeight[i], gray);
             }
+            RecognitionImage.saveImage(bitmap);
+            bitmap = Tilt.tilt(bitmap);
+            RecognitionImage.saveImage(bitmap);
+            System.out.println("digital3 +" + i + "  -------------------");
             bitmap = RoomImage.bilinear(bitmap, 28, 28);
             bitmap = Gray_Scale.getGray(bitmap);
-            bitmap = OtsuBinarryFilter.filter(bitmap, null);
+            bitmap = OtsuBinarryFilter.filter1(bitmap, null);
             //ExpansionImage expansionImage = new ExpansionImage(bitmap);
-            // bitmap = expansionImage.getExpansion();
+            //bitmap = expansionImage.getExpansion();
             System.out.println("digital1 +" + i + "  -------------------");
             RecognitionImage recognitionImage = new RecognitionImage(context);
             ansList.add(recognitionImage.recognition(bitmap));
